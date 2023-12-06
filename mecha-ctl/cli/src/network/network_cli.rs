@@ -5,7 +5,7 @@ use clap::{Args, Subcommand};
 
 pub use mecha_network_ctl::{Network, NetworkStatus};
 
-pub use crete::network::{NetworkError, NetworkErrorCodes};
+pub use crate::network::{NetworkError, NetworkErrorCodes};
 
 #[derive(Debug, Args)]
 #[command(name = "network")]

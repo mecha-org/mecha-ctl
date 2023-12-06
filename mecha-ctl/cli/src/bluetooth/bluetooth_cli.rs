@@ -4,7 +4,7 @@ use clap::{Args, Subcommand};
 
 
 pub use mecha_bluetooth_ctl::{Bluetooth, BluetoothStatus};
-use crete::blueooth::{BluetoothError, BluetoothErrorCodes};
+use crate::bluetooth::{BluetoothError, BluetoothErrorCodes};
 
 #[derive(Debug, Args)]
 #[command(name = "bluetooth")]
