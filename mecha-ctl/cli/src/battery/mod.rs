@@ -1,5 +1,5 @@
-mod battery_cli;
-pub use battery_cli::Battery;
+mod cmd;
+pub use cmd::Battery;
 
 mod errors;
 pub use errors::{BatteryError, BatteryErrorCodes};

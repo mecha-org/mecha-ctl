@@ -1,5 +1,5 @@
-mod bluetooth_cli;
-pub use bluetooth_cli::Bluetooth;
+mod cmd;
+pub use cmd::Bluetooth;
 
 mod errors;
 pub use errors::{BluetoothError, BluetoothErrorCodes};

@@ -1,5 +1,5 @@
-mod network_cli;
-pub use network_cli::Network;
+mod cmd;
+pub use cmd::Network;
 
 mod errors;
 pub use errors::{NetworkError, NetworkErrorCodes};

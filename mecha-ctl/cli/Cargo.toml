@@ -1,5 +1,5 @@
 [package]
-name = "cli"
+name = "mecha_ctl_cli"
 version = "0.1.0"
 edition = "2021"
 repository = "https://github.com/mecha-org/mecha-ctl"
