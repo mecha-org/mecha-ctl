@@ -3,9 +3,8 @@
 use anyhow::Result;
 use clap::{Args, Subcommand};
 
-pub use mecha_network_ctl::{Network, NetworkStatus};
-
 pub use crate::network::{NetworkError, NetworkErrorCodes};
+pub use mecha_network_ctl::wireless_network::WirelessNetworkModule;
 
 #[derive(Debug, Args)]
 #[command(name = "network")]
@@ -55,40 +54,45 @@ struct WirelessConnectArgs {
 
 impl Network {
     pub async fn execute(&self) -> Result<()> {
-
-        let mut network_module =  match Network::new().await {
-            Ok(network_module) => network_module,
-            Err(e) => {
-                return Err(e);
-            }
-        };
+        let network_module = WirelessNetworkModule::new();
         match &self.command {
             NetworkCommand::Scan => {
-                let scan_results = match network_module.scan_wireless_network().await {
-                    Ok(scan_results) => scan_results,
+                let _scan_results = match network_module.scan_wireless_network().await {
+                    Ok(scan_results) => {
+                        scan_results.iter().for_each(|network| {
+                            println!(
+                                "Network SSID: {}, Signal Strength: {}",
+                                network.name, network.flags
+                            );
+                        });
+                        scan_results
+                    }
                     Err(e) => {
                         return Err(e);
                     }
                 };
-
-
             }
             NetworkCommand::Add(args) => {
-                let _ = match network_module.add_wireless_network(&args.ssid, &args.password).await {
-                    Ok(add_results) => add_results,
+                let ssid = &args.ssid;
+                let psk = &args.password;
+                let _add_wireless_network = match WirelessNetworkModule::connect_wireless_network(
+                    ssid.as_str(),
+                    psk.as_str(),
+                )
+                .await
+                {
+                    Ok(()) => (),
                     Err(e) => {
                         return Err(e);
                     }
                 };
             }
             NetworkCommand::Remove(args) => {
-            
-
                 //take ssid form arg and convert it into i32
-                let network_id = args.ssid.parse::<i32>().unwrap();
+                let network_id = args.ssid.parse::<usize>().unwrap();
 
                 // use args and use remove_wireless_network
-                let _ = match network_module.remove_wireless_network(&args.ssid).await {
+                let _ = match WirelessNetworkModule::remove_wireless_network(network_id).await {
                     Ok(remove_results) => remove_results,
                     Err(e) => {
                         return Err(e);
@@ -96,7 +100,12 @@ impl Network {
                 };
             }
             NetworkCommand::Connect(args) => {
-                let _ = match network_module.connect_wireless_network(&args.ssid, &args.password).await {
+                let _ = match WirelessNetworkModule::connect_wireless_network(
+                    &args.ssid,
+                    &args.password,
+                )
+                .await
+                {
                     Ok(connect_results) => connect_results,
                     Err(e) => {
                         return Err(e);

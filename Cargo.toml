@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 
-members = ["mecha-ctl/cli", "mecha-ctl/server", ]
+members = ["mecha-ctl/cli", "mecha-ctl/server",]
 
 
 [default.members]

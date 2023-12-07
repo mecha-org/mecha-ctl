@@ -28,8 +28,8 @@ enum Mecha {
     Battery(Battery),
     #[command(about = "Device bluetooth utility")]
     Bluetooth(Bluetooth),
-    // #[command(about = "Interact with network utility")]
-    // Network(Network),
+    #[command(about = "Interact with network utility")]
+    Network(Network),
 }
 
 #[tokio::main]

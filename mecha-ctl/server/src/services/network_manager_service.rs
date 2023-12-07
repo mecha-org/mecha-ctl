@@ -1,4 +1,4 @@
-use mecha_network_manager::wireless_network::WirelessNetworkModule;
+use mecha_network_ctl::wireless_network::WirelessNetworkModule;
 use tonic::{Request, Response, Status};
 
 #[derive(Default)]

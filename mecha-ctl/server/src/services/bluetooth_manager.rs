@@ -1,5 +1,5 @@
 use anyhow::Result;
-use mecha_bluetooth_manager::BluetoothController;
+use mecha_bluetooth_ctl::BluetoothController;
 use tonic::{Request, Response, Status};
 
 #[derive(Debug, Default)]

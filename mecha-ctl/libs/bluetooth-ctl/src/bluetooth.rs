@@ -81,92 +81,92 @@ impl BluetoothController {
 }
 
 
-//unit tests
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use bluer::adapter::Adapter;
-    use bluer::adapter::AdapterState;
-    use bluer::adapter::BluetoothVersion;
-    use bluer::adapter::Device;
-    use bluer::adapter::DeviceType;
-    use bluer::adapter::DiscoveryFilter;
-    use bluer::adapter::DiscoverySession;
-    use bluer::adapter::Session;
-    use bluer::adapter::Transport;
-    use bluer::Error;
-    use bluer::ErrorKind;
-    use bluer::Session as BluerSession;
-    use std::sync::Arc;
-    use tokio::sync::Mutex;
+// //unit tests
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     use bluer::adapter::Adapter;
+//     use bluer::adapter::AdapterState;
+//     use bluer::adapter::BluetoothVersion;
+//     use bluer::adapter::Device;
+//     use bluer::adapter::DeviceType;
+//     use bluer::adapter::DiscoveryFilter;
+//     use bluer::adapter::DiscoverySession;
+//     use bluer::adapter::Session;
+//     use bluer::adapter::Transport;
+//     use bluer::Error;
+//     use bluer::ErrorKind;
+//     use bluer::Session as BluerSession;
+//     use std::sync::Arc;
+//     use tokio::sync::Mutex;
 
-    #[derive(Clone)]
-    struct MockSession {
-        adapter: Arc<Mutex<MockAdapter>>,
-    }
+//     #[derive(Clone)]
+//     struct MockSession {
+//         adapter: Arc<Mutex<MockAdapter>>,
+//     }
 
-    impl MockSession {
-        fn new(adapter: MockAdapter) -> Self {
-            Self {
-                adapter: Arc::new(Mutex::new(adapter)),
-            }
-        }
-    }
+//     impl MockSession {
+//         fn new(adapter: MockAdapter) -> Self {
+//             Self {
+//                 adapter: Arc::new(Mutex::new(adapter)),
+//             }
+//         }
+//     }
 
-    impl BluerSession for MockSession {
-        fn default_adapter(&self) -> Box<dyn Adapter> {
-            Box::new(self.adapter.clone())
-        }
-    }
+//     impl BluerSession for MockSession {
+//         fn default_adapter(&self) -> Box<dyn Adapter> {
+//             Box::new(self.adapter.clone())
+//         }
+//     }
 
-    #[derive(Clone)]
-    struct MockAdapter {
-        powered: bool,
-    }
+//     #[derive(Clone)]
+//     struct MockAdapter {
+//         powered: bool,
+//     }
 
-    impl MockAdapter {
-        fn new(powered: bool) -> Self {
-            Self { powered }
-        }
-    }
+//     impl MockAdapter {
+//         fn new(powered: bool) -> Self {
+//             Self { powered }
+//         }
+//     }
 
-    #[async_trait]
-    impl Adapter for MockAdapter {
-        async fn address(&self) -> Result<String, Error> {
-            Ok("mock_address".to_string())
-        }
+//     #[async_trait]
+//     impl Adapter for MockAdapter {
+//         async fn address(&self) -> Result<String, Error> {
+//             Ok("mock_address".to_string())
+//         }
 
-        async fn name(&self) -> Result<String, Error> {
-            Ok("mock_name".to_string())
-        }
+//         async fn name(&self) -> Result<String, Error> {
+//             Ok("mock_name".to_string())
+//         }
 
-        async fn alias(&self) -> Result<String, Error> {
-            Ok("mock_alias".to_string())
-        }
+//         async fn alias(&self) -> Result<String, Error> {
+//             Ok("mock_alias".to_string())
+//         }
 
-        async fn set_alias(&self, _alias: &str) -> Result<(), Error> {
-            Ok(())
-        }
+//         async fn set_alias(&self, _alias: &str) -> Result<(), Error> {
+//             Ok(())
+//         }
 
-        async fn class(&self) -> Result<u32, Error> {
-            Ok(0)
-        }
+//         async fn class(&self) -> Result<u32, Error> {
+//             Ok(0)
+//         }
 
-        async fn set_class(&self, _class: u32) -> Result<(), Error> {
-            Ok(())
-        }
+//         async fn set_class(&self, _class: u32) -> Result<(), Error> {
+//             Ok(())
+//         }
 
-        async fn powered(&self) -> Result<bool, Error> {
-            Ok(self.powered)
-        }
+//         async fn powered(&self) -> Result<bool, Error> {
+//             Ok(self.powered)
+//         }
 
-        async fn set_powered(&self, powered: bool) -> Result<(), Error> {
-            Ok(())
-        }
+//         async fn set_powered(&self, powered: bool) -> Result<(), Error> {
+//             Ok(())
+//         }
 
-        async fn discoverable(&self) -> Result<bool, Error> {
-            Ok(false)
-        }
+//         async fn discoverable(&self) -> Result<bool, Error> {
+//             Ok(false)
+//         }
 
-    }
-}
+//     }
+// }

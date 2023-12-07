@@ -1,9 +1,9 @@
 #![deny(clippy::all)]
-use anyhow::Result;
+use anyhow::{Result,bail};
 use clap::{Args, Subcommand};
 
 
-pub use mecha_bluetooth_ctl::{Bluetooth, BluetoothStatus};
+pub use mecha_bluetooth_ctl::{BluetoothController,BluetoothErrorCodes as BluetoothSDKErrorCode};
 use crate::bluetooth::{BluetoothError, BluetoothErrorCodes};
 
 #[derive(Debug, Args)]
@@ -60,7 +60,7 @@ impl Bluetooth {
                     "unable to detect bluetooth".to_string()
                 ))
             }
-        }
+        };
         match &self.command {
             BluetoothCommand::Scan => {
                 println!("Scanning for bluetooth devices...");

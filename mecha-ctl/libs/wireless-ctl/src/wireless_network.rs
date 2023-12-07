@@ -1,8 +1,9 @@
-use crate::wireless_network::errors::{WirelessNetworkError, WirelessNetworkErrorCodes};
 use anyhow::{bail, Result};
 use std::process::Command;
 use tracing::{error as trace_error, info, trace};
 use wifi_ctrl::sta::{self, NetworkResult, ScanResult};
+
+use crate::errors::{WirelessNetworkError,WirelessNetworkErrorCodes};
 
 pub struct WirelessNetworkModule;
 

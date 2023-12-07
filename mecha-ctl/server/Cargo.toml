@@ -13,7 +13,7 @@ log = "0.4.20"
 serde_yaml = "0.9.25"
 serde = { version = "1.0.164", features = ["derive"] }
 mecha_battery_ctl = { path = "../libs/battery-ctl" }
-mecha_network_ctl ={path = "../libs/wireless-ctl"}
+mecha_network_ctl = {path = "../libs/wireless-ctl"}
 mecha_bluetooth_ctl ={path="../libs/bluetooth-ctl"}
 anyhow = { version = "1.0.75", features = ["backtrace"] }
 tracing = "0.1"
