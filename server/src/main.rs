@@ -10,7 +10,7 @@ mod configs;
 use crate::configs::BaseConfig;
 
 mod services;
-use crate::services::{Battery, PowerSupply, PowerSupplyServiceServer};
+use crate::services::{Battery, BatteryControl, PowerSupplyServiceServer};
 use crate::services::{Bluetooth, BluetoothServiceServer};
 use crate::services::{NetworkManager, NetworkManagerServiceServer};
 
@@ -32,7 +32,7 @@ async fn main() -> Result<()> {
     };
 
     //power service
-    let power_supply = PowerSupply {
+    let power_supply = BatteryControl {
         power_supply: battery,
     };
 

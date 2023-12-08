@@ -3,7 +3,7 @@ use anyhow::{Result,bail};
 use clap::{Args, Subcommand};
 
 
-pub use mecha_bluetooth_ctl::{BluetoothController,BluetoothErrorCodes as BluetoothSDKErrorCode};
+pub use mecha_bluetooth_ctl::{BluetoothControl,BluetoothErrorCodes as BluetoothSDKErrorCode};
 use crate::bluetooth::{BluetoothError, BluetoothErrorCodes};
 
 #[derive(Debug, Args)]
@@ -51,7 +51,7 @@ struct BluetoothDisconnectArgs {
 
 impl Bluetooth {
     pub async fn execute(&self) -> Result<()> { 
-        let controller = match BluetoothController::new().await {
+        let controller = match BluetoothControl::new().await {
             Ok(controller) => controller,
             Err(err) => {
                 println!("Error: {}", err);

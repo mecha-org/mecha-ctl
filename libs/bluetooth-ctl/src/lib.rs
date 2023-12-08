@@ -1,6 +1,6 @@
 #![deny(clippy::all)]
 mod bluetooth;
-pub use bluetooth::BluetoothController;
+pub use bluetooth::BluetoothControl;
 
 mod errors;
 pub use errors::{BluetoothError, BluetoothErrorCodes};

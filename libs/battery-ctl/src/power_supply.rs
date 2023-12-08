@@ -5,7 +5,7 @@ use std::io::Read;
 use tracing::{error as trace_error, info, instrument, trace};
 
 #[derive(Debug)]
-pub struct PowerSupply {
+pub struct BatteryControl {
     pub name: String,
     pub r#type: String,
     pub status: String,
@@ -23,7 +23,7 @@ pub struct PowerSupply {
 }
 
 pub trait PowerSupplyInfo {
-    fn info(&self) -> Result<PowerSupply>;
+    fn info(&self) -> Result<BatteryControl>;
     fn set_device(&mut self, device: &str) -> Result<()>;
     fn get_device(&self) -> Result<&str>;
     fn get_current(&self) -> Result<i64>;
@@ -37,21 +37,16 @@ pub struct Battery {
 
 impl PowerSupplyInfo for Battery {
     #[instrument]
-    fn info(&self) -> Result<PowerSupply> {
+    fn info(&self) -> Result<BatteryControl> {
         trace!(task = "battery_info", "init");
         info!("Battery info");
         let mut file = match File::open(&self.path) {
-           
             Ok(file) => {
                 trace!(task = "battery_info", "open file");
                 file
             }
             Err(err) => {
-                trace_error!(
-                    task = "battery_info",
-                    "failed to open file: {}",
-                    err
-                );
+                trace_error!(task = "battery_info", "failed to open file: {}", err);
                 bail!(PowerSupplyError::new(
                     PowerSupplyErrorCodes::FailedToOpenFile,
                     "failed to open file".to_string(),
@@ -61,7 +56,7 @@ impl PowerSupplyInfo for Battery {
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
 
-        let mut power_supply = PowerSupply {
+        let mut power_supply = BatteryControl {
             name: String::new(),
             r#type: String::new(),
             status: String::new(),

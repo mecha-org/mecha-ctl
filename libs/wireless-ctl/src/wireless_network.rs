@@ -5,9 +5,9 @@ use wifi_ctrl::sta::{self, NetworkResult, ScanResult};
 
 use crate::errors::{WirelessNetworkError,WirelessNetworkErrorCodes};
 
-pub struct WirelessNetworkModule;
+pub struct WirelessNetworkControl;
 
-impl WirelessNetworkModule {
+impl WirelessNetworkControl {
     pub fn new() -> Self {
         trace!(task = "wireless network instance", "init");
         Self
@@ -59,8 +59,8 @@ impl WirelessNetworkModule {
                     trace_error!(task = "scan_wireless_network", "error: {}", e);
                 }
             },
-            WirelessNetworkModule::wireless_network_list(requester),
-            WirelessNetworkModule::broadcast_listener(broadcast),
+            WirelessNetworkControl::wireless_network_list(requester),
+            WirelessNetworkControl::broadcast_listener(broadcast),
         );
 
         //use wireless_network_list to get the list of all the wireless network networks or else return an error with matching error code
@@ -124,8 +124,8 @@ impl WirelessNetworkModule {
                     trace_error!(task = "get_known_wireless_networks", "error: {}", e);
                 }
             },
-            WirelessNetworkModule::known_wireless_networks(requester),
-            WirelessNetworkModule::broadcast_listener(broadcast),
+            WirelessNetworkControl::known_wireless_networks(requester),
+            WirelessNetworkControl::broadcast_listener(broadcast),
         );
 
         //use known_wireless_networks to get the list of all the known wireless network networks or else return an error with matching error code
@@ -159,11 +159,11 @@ impl WirelessNetworkModule {
 
     // we need to write function that return the currnet wireless network name if it is connected to wireless network or else none, how we're going to do that is we use get_known_wireless_networks function to get the list of all the known wireless network networks and from that reult we can filter the list that has  "flags": "[CURRENT]" and return the ssid of that network or else return none
     pub async fn current_wireless_network(&self) -> Result<ScanResult> {
-        let known_wifi_list = WirelessNetworkModule::get_known_wireless_networks().await?;
+        let known_wifi_list = WirelessNetworkControl::get_known_wireless_networks().await?;
         let current_wifi = known_wifi_list.iter().find(|&x| x.flags == "[CURRENT]");
 
         //take ssid for current wireless network and find that in scan_networks list and return that network or else return an error with matching error code
-        let scan_wifi_list = WirelessNetworkModule::scan_wireless_network(&self).await?;
+        let scan_wifi_list = WirelessNetworkControl::scan_wireless_network(&self).await?;
         let current_wifi = current_wifi
             .map(|x| {
                 scan_wifi_list
@@ -222,8 +222,8 @@ impl WirelessNetworkModule {
                     trace_error!(task = "connect_wireless_network", "error: {}", e);
                 }
             },
-            WirelessNetworkModule::connect_wireless_network_list(requester, &ssid, &psk),
-            WirelessNetworkModule::broadcast_listener(broadcast),
+            WirelessNetworkControl::connect_wireless_network_list(requester, &ssid, &psk),
+            WirelessNetworkControl::broadcast_listener(broadcast),
         );
 
         let wireless_network_list = match connect_wireless_network_list {
@@ -368,8 +368,8 @@ impl WirelessNetworkModule {
                     trace_error!(task = "remove_wireless_network", "error: {}", e);
                 }
             },
-            WirelessNetworkModule::remove_network(requester, network_id),
-            WirelessNetworkModule::broadcast_listener(broadcast),
+            WirelessNetworkControl::remove_network(requester, network_id),
+            WirelessNetworkControl::broadcast_listener(broadcast),
         );
 
         //use remove_network to remove the wireless network or else return an error with matching error code

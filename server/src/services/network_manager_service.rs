@@ -1,4 +1,4 @@
-use mecha_network_ctl::wireless_network::WirelessNetworkModule;
+use mecha_network_ctl::wireless_network::WirelessNetworkControl;
 use tonic::{Request, Response, Status};
 
 #[derive(Default)]
@@ -68,7 +68,7 @@ impl NetworkManager {
     }
 
     async fn connect_to_wifi(&self, ssid: &str, psk: &str) -> Result<(), &str> {
-        let connect_wireless_network_list = WirelessNetworkModule::connect_wireless_network(ssid, psk).await;
+        let connect_wireless_network_list = WirelessNetworkControl::connect_wireless_network(ssid, psk).await;
 
         match connect_wireless_network_list {
             Ok(_) => Ok(()),
@@ -77,7 +77,7 @@ impl NetworkManager {
     }
 
     async fn remove_wifi_network(&self, network_id: usize) -> Result<(), &str> {
-        let remove_network = WirelessNetworkModule::remove_wireless_network(network_id).await;
+        let remove_network = WirelessNetworkControl::remove_wireless_network(network_id).await;
 
         match remove_network {
             Ok(_) => Ok(()),
@@ -96,7 +96,7 @@ impl NetworkManagerService for NetworkManager {
         let mut scan_results = ScanResults::default();
 
         log::info!("Starting All Wifi List Function");
-        let wifi_service = WirelessNetworkModule::new();
+        let wifi_service = WirelessNetworkControl::new();
 
         //get wifi list from mecha_edge_sdk
         // Attempt to get the wifi list from mecha_edge_sdk and handle errors.
@@ -167,7 +167,7 @@ impl NetworkManagerService for NetworkManager {
         log::info!("Starting Known Wifi List Function");
 
         //get wifi list from mecha_edge_sdk
-        let wireless_network_list = match WirelessNetworkModule::get_known_wireless_networks().await {
+        let wireless_network_list = match WirelessNetworkControl::get_known_wireless_networks().await {
             Ok(wireless_network_list) => wireless_network_list,
             Err(err) => {
                 // Convert the error into a gRPC Status and return it.
@@ -192,7 +192,7 @@ impl NetworkManagerService for NetworkManager {
         _request: Request<Empty>,
     ) -> Result<Response<WifiStatusResponse>, Status> {
         // Implement your logic to check Wi-Fi status here
-        let wifi_on = WirelessNetworkModule::wireless_network_status(); // This should return true if Wi-Fi is on, false otherwise.
+        let wifi_on = WirelessNetworkControl::wireless_network_status(); // This should return true if Wi-Fi is on, false otherwise.
 
         let wifi_status_response = WifiStatusResponse { wifi_on };
 
@@ -204,7 +204,7 @@ impl NetworkManagerService for NetworkManager {
         _request: Request<Empty>,
     ) -> Result<Response<ScanResult>, Status> {
         // Implement your logic to get current Wi-Fi network here
-        let wifi_service = WirelessNetworkModule::new();
+        let wifi_service = WirelessNetworkControl::new();
         let current_network = match wifi_service.current_wireless_network().await {
             Ok(current_network) => current_network,
             Err(err) => {

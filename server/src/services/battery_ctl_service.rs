@@ -3,7 +3,7 @@ pub use mecha_battery_ctl::{Battery, PowerSupplyInfo};
 use tonic::{Request, Response, Status};
 
 #[derive(Default)]
-pub struct PowerSupply {
+pub struct BatteryControl {
     pub power_supply: Battery,
 }
 
@@ -17,7 +17,7 @@ pub use power_supply::{
 };
 
 #[tonic::async_trait]
-impl PowerSupplyService for PowerSupply {
+impl PowerSupplyService for BatteryControl {
     async fn get_power_supply_info(
         &self,
         _request: Request<Empty>,

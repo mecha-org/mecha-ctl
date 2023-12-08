@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::{Args, Subcommand};
 
 pub use crate::network::{NetworkError, NetworkErrorCodes};
-pub use mecha_network_ctl::wireless_network::WirelessNetworkModule;
+pub use mecha_network_ctl::wireless_network::WirelessNetworkControl;
 
 #[derive(Debug, Args)]
 #[command(name = "network")]
@@ -54,7 +54,7 @@ struct WirelessConnectArgs {
 
 impl Network {
     pub async fn execute(&self) -> Result<()> {
-        let network_module = WirelessNetworkModule::new();
+        let network_module = WirelessNetworkControl::new();
         match &self.command {
             NetworkCommand::Scan => {
                 let _scan_results = match network_module.scan_wireless_network().await {
@@ -75,7 +75,7 @@ impl Network {
             NetworkCommand::Add(args) => {
                 let ssid = &args.ssid;
                 let psk = &args.password;
-                let _add_wireless_network = match WirelessNetworkModule::connect_wireless_network(
+                let _add_wireless_network = match WirelessNetworkControl::connect_wireless_network(
                     ssid.as_str(),
                     psk.as_str(),
                 )
@@ -92,7 +92,7 @@ impl Network {
                 let network_id = args.ssid.parse::<usize>().unwrap();
 
                 // use args and use remove_wireless_network
-                let _ = match WirelessNetworkModule::remove_wireless_network(network_id).await {
+                let _ = match WirelessNetworkControl::remove_wireless_network(network_id).await {
                     Ok(remove_results) => remove_results,
                     Err(e) => {
                         return Err(e);
@@ -100,7 +100,7 @@ impl Network {
                 };
             }
             NetworkCommand::Connect(args) => {
-                let _ = match WirelessNetworkModule::connect_wireless_network(
+                let _ = match WirelessNetworkControl::connect_wireless_network(
                     &args.ssid,
                     &args.password,
                 )

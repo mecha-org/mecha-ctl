@@ -5,11 +5,11 @@ use tracing::{error as trace_error, info, trace};
 //allow dead_code
 #[allow(dead_code)]
 
-pub struct BluetoothController {
+pub struct BluetoothControl {
     session: Session,
 }
 
-impl BluetoothController {
+impl BluetoothControl {
     pub async fn new() -> Result<Self> {
         let session = Session::new().await?;
         Ok(Self { session })

@@ -1,5 +1,5 @@
 use anyhow::Result;
-use mecha_bluetooth_ctl::BluetoothController;
+use mecha_bluetooth_ctl::BluetoothControl;
 use tonic::{Request, Response, Status};
 
 #[derive(Debug, Default)]
@@ -21,7 +21,7 @@ impl BluetoothService for Bluetooth {
         _request: Request<Empty>,
     ) -> Result<Response<BluetoothStatus>, Status> {
         //try to crearte a new bluetooth controller or return an error using match
-        let controller = match BluetoothController::new().await {
+        let controller = match BluetoothControl::new().await {
             Ok(controller) => controller,
             Err(e) => {
                 return Err(Status::from_error(e.into()));
@@ -44,7 +44,7 @@ impl BluetoothService for Bluetooth {
         &self,
         _request: Request<Empty>,
     ) -> Result<Response<EmptyResponse>, Status> {
-        let controller = match BluetoothController::new().await {
+        let controller = match BluetoothControl::new().await {
             Ok(controller) => controller,
             Err(e) => {
                 return Err(Status::from_error(e.into()));
@@ -65,7 +65,7 @@ impl BluetoothService for Bluetooth {
         &self,
         _request: Request<Empty>,
     ) -> Result<Response<EmptyResponse>, Status> {
-        let controller = match BluetoothController::new().await {
+        let controller = match BluetoothControl::new().await {
             Ok(controller) => controller,
             Err(e) => {
                 return Err(Status::from_error(e.into()));
