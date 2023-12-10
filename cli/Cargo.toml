@@ -17,5 +17,6 @@ tracing-subscriber = "0.3"
 mecha_battery_ctl = { path = "../libs/battery-ctl" }
 mecha_network_ctl = {path = "../libs/wireless-ctl"}
 mecha_bluetooth_ctl ={path="../libs/bluetooth-ctl"}
+mecha_display_ctl = {path="../libs/display_ctl"}
 
 

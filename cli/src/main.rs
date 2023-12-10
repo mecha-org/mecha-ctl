@@ -1,9 +1,8 @@
 //add clippy
 #![warn(clippy::all)]
-use anyhow::{bail, Result};
-use std::{fs::File, io::BufReader};
+use anyhow::Result;
 
-use clap::{Parser, Subcommand};
+use clap::Parser;
 
 mod battery;
 use battery::Battery;
@@ -13,6 +12,9 @@ use bluetooth::Bluetooth;
 
 mod network;
 pub use network::Network;
+
+mod display;
+pub use display::Display;
 
 #[derive(Debug, Parser)]
 #[command(name = "mecha")]
@@ -30,6 +32,8 @@ enum Mecha {
     Bluetooth(Bluetooth),
     #[command(about = "Interact with network utility")]
     Network(Network),
+    #[command(about = "Device Display utility")]
+    Display(Display),
 }
 
 #[tokio::main]
@@ -55,9 +59,14 @@ async fn main() -> Result<()> {
             Err(e) => {
                 println!("Error: {}", e);
             }
-        }
+        },
 
-
+        Mecha::Display(display) => match display.execute().await {
+            Ok(_) => {}
+            Err(e) => {
+                println!("Error: {}", e);
+            }
+        },
     }
     Ok(())
 }
