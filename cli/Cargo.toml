@@ -19,5 +19,6 @@ mecha_network_ctl = {path = "../libs/wireless-ctl"}
 mecha_bluetooth_ctl ={path="../libs/bluetooth-ctl"}
 mecha_display_ctl = {path="../libs/display_ctl"}
 mecha_led_ctl = {path="../libs/led_ctl"}
+mecha_device_info_ctl = {path = "../libs/device-info-ctl"}
 
 

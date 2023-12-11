@@ -19,6 +19,9 @@ pub use display::Display;
 mod led;
 pub use led::Led;
 
+mod device_info;
+pub use device_info::DeviceInfo;
+
 #[derive(Debug, Parser)]
 #[command(name = "mecha")]
 #[command(about = "A fictional Mecha CLI", long_about = None)]
@@ -39,6 +42,8 @@ enum Mecha {
     Display(Display),
     #[command(about = "Device led utility")]
     Led(Led),
+    #[command(about = "Device Info utility")]
+    DeviceInfo(DeviceInfo),
 }
 
 #[tokio::main]
@@ -74,6 +79,13 @@ async fn main() -> Result<()> {
         },
 
         Mecha::Led(led) => match led.execute().await {
+            Ok(_) => {}
+            Err(e) => {
+                println!("Error: {}", e);
+            }
+        },
+        
+        Mecha::DeviceInfo(device_info) => match device_info.execute().await {
             Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);

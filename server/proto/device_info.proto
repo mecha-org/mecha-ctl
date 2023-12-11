@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package deviceinfo;
 
-service DeviceInfoService {
+service DeviceInfoCtlService {
     rpc GetMemoryInfo (Empty) returns (MemoryInfoResponse) {}
     rpc GetDiskInfo (Empty) returns (DiskInfoResponse) {}
     rpc GetCpuInfo (Empty) returns (CpuInfoResponse) {}
