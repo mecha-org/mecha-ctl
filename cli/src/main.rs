@@ -16,6 +16,9 @@ pub use network::Network;
 mod display;
 pub use display::Display;
 
+mod led;
+pub use led::Led;
+
 #[derive(Debug, Parser)]
 #[command(name = "mecha")]
 #[command(about = "A fictional Mecha CLI", long_about = None)]
@@ -34,6 +37,8 @@ enum Mecha {
     Network(Network),
     #[command(about = "Device Display utility")]
     Display(Display),
+    #[command(about = "Device led utility")]
+    Led(Led),
 }
 
 #[tokio::main]
@@ -67,6 +72,15 @@ async fn main() -> Result<()> {
                 println!("Error: {}", e);
             }
         },
+
+        Mecha::Led(led)=>match led.execute().await{
+            Ok(_)=>{}
+            Err(e) => {
+                println!("Error: {}", e);
+            }
+
+
+        }
     }
     Ok(())
 }
