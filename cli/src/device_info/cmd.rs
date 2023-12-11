@@ -2,6 +2,7 @@ use anyhow::{bail, Result};
 use clap::{Args, Subcommand};
 
 use mecha_device_info_ctl::{DeviceInfoCtl, DeviceInfoCtlError, DeviceInfoCtlErrorCodes};
+use mecha_metrics_ctl::{DeviceMetricsCtl, DeviceMetricsCtlError, DeviceMetricsCtlErrorCodes};
 
 #[derive(Debug, Args)]
 pub struct DeviceInfo {
@@ -63,14 +64,23 @@ enum StorageCommands {
 impl DeviceInfo {
     pub async fn execute(&self) -> Result<()> {
         let device_info = DeviceInfoCtl::new();
+        let device_matrics = DeviceMetricsCtl::new();
         match &self.command {
             DeviceInfoCommands::Cpu(cpu) => {
                 // Handle CPU commands
 
                 match &cpu.command {
-                    CpuCommands::Usage => {
-                        println!("CPU Usage: 50%");
-                    }
+                    CpuCommands::Usage => match device_matrics.get_cpu_usage() {
+                        Ok(usage) => {
+                            println!("Usage : {}", usage);
+                        }
+                        Err(e) => {
+                            bail!(DeviceMetricsCtlError::new(
+                                DeviceMetricsCtlErrorCodes::FailedToGetCpuUsage,
+                                e.to_string(),
+                            ),);
+                        }
+                    },
                     CpuCommands::Info => match device_info.get_cpu_info() {
                         Ok(info) => {
                             println!("Cpu info {:?}", info);
@@ -87,9 +97,17 @@ impl DeviceInfo {
             DeviceInfoCommands::Memory(memory) => {
                 // Handle Memory commands
                 match &memory.command {
-                    MemoryCommands::Usage => {
-                        println!("Memory Usage: 8GB");
-                    }
+                    MemoryCommands::Usage => match device_matrics.get_memory_usage() {
+                        Ok(usage) => {
+                            println!("Usage : {}", usage);
+                        }
+                        Err(e) => {
+                            bail!(DeviceMetricsCtlError::new(
+                                DeviceMetricsCtlErrorCodes::FailedToGetCpuUsage,
+                                e.to_string(),
+                            ),);
+                        }
+                    },
                     MemoryCommands::Info => match device_info.get_memory_info() {
                         Ok(info) => {
                             println!("info : {:?}", info);
@@ -106,9 +124,17 @@ impl DeviceInfo {
             DeviceInfoCommands::Storage(storage) => {
                 // Handle Storage commands
                 match &storage.command {
-                    StorageCommands::Usage => {
-                        println!("Storage Usage: 500GB");
-                    }
+                    StorageCommands::Usage => match device_matrics.get_disk_usage() {
+                        Ok(usage) => {
+                            println!("Usage : {}", usage);
+                        }
+                        Err(e) => {
+                            bail!(DeviceMetricsCtlError::new(
+                                DeviceMetricsCtlErrorCodes::FailedToGetCpuUsage,
+                                e.to_string(),
+                            ),);
+                        }
+                    },
                     StorageCommands::Info => match device_info.get_disk_info() {
                         Ok(info) => {
                             println!("disk info : {:?}", info)
