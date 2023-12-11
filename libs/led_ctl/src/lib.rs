@@ -3,4 +3,4 @@ mod led;
 pub use led::{LedControl, LedColor};
 
 mod errors;
-pub use errors::{LedCtrlError, LedCtrlErrorCodes};
+pub use errors::{LedctlError, LedctlErrorCodes};

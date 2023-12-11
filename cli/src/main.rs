@@ -73,14 +73,12 @@ async fn main() -> Result<()> {
             }
         },
 
-        Mecha::Led(led)=>match led.execute().await{
-            Ok(_)=>{}
+        Mecha::Led(led) => match led.execute().await {
+            Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);
             }
-
-
-        }
+        },
     }
     Ok(())
 }

@@ -16,6 +16,7 @@ mecha_battery_ctl = { path = "../libs/battery-ctl" }
 mecha_network_ctl = {path = "../libs/wireless-ctl"}
 mecha_bluetooth_ctl ={path="../libs/bluetooth-ctl"}
 mecha_display_ctl = {path="../libs/display_ctl"}
+mecha_led_ctl = {path="../libs/led_ctl"}
 anyhow = { version = "1.0.75", features = ["backtrace"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"

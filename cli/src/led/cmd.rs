@@ -2,7 +2,7 @@ use anyhow::{bail, Result};
 use clap::{Args, Subcommand};
 
 // use crate::led::led_interface::LedManagerClient;
-pub use mecha_led_ctl::{LedControl, LedCtrlError, LedCtrlErrorCodes};
+pub use mecha_led_ctl::{LedControl, LedctlError, LedctlErrorCodes};
 
 //create led args
 #[derive(Debug, Args)]
@@ -47,8 +47,8 @@ impl Led {
                 let _ = match led.set_led(red as u8, green as u8, blue as u8) {
                     Ok(_) => {}
                     Err(e) => {
-                        bail!(LedCtrlError::new(
-                            LedCtrlErrorCodes::InvalidLedPathValueError,
+                        bail!(LedctlError::new(
+                            LedctlErrorCodes::InvalidLedPathValueError,
                             e.to_string(),
                         ),);
                     }
@@ -66,8 +66,8 @@ impl Led {
                 let _ = match led.set_led(red as u8, green as u8, blue as u8) {
                     Ok(_) => {}
                     Err(e) => {
-                        bail!(LedCtrlError::new(
-                            LedCtrlErrorCodes::InvalidLedColorError,
+                        bail!(LedctlError::new(
+                            LedctlErrorCodes::InvalidLedColorError,
                             e.to_string(),
                         ),);
                     }

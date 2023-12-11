@@ -1,4 +1,4 @@
-use crate::errors::{LedCtrlError, LedCtrlErrorCodes};
+use crate::errors::{LedctlError, LedctlErrorCodes};
 use anyhow::{bail, Result};
 use std::fs::File;
 use std::io::{self, Write};
@@ -37,8 +37,8 @@ impl LedControl {
         // Set red LED
         if let Err(e) = self.write_brightness(&self.red_led_path, &red.to_string()) {
             trace_error!(task = "set_led", "unable to write brightness value: {}", e);
-            bail!(LedCtrlError::new(
-                LedCtrlErrorCodes::InvalidLedPathValueError,
+            bail!(LedctlError::new(
+                LedctlErrorCodes::InvalidLedPathValueError,
                 format!("unable to write brightness value: {}", e),
             ));
         }
@@ -46,8 +46,8 @@ impl LedControl {
         // Set green LED
         if let Err(e) = self.write_brightness(&self.green_led_path, &green.to_string()) {
             trace_error!(task = "set_led", "unable to write brightness value: {}", e);
-            bail!(LedCtrlError::new(
-                LedCtrlErrorCodes::InvalidLedPathValueError,
+            bail!(LedctlError::new(
+                LedctlErrorCodes::InvalidLedPathValueError,
                 format!("unable to write brightness value: {}", e),
             ));
         }
@@ -55,8 +55,8 @@ impl LedControl {
         // Set blue LED
         if let Err(e) = self.write_brightness(&self.blue_led_path, &blue.to_string()) {
             trace_error!(task = "set_led", "unable to write brightness value: {}", e);
-            bail!(LedCtrlError::new(
-                LedCtrlErrorCodes::InvalidLedPathValueError,
+            bail!(LedctlError::new(
+                LedctlErrorCodes::InvalidLedPathValueError,
                 format!("unable to write brightness value: {}", e),
             ));
         }
@@ -83,8 +83,8 @@ impl LedControl {
                 "unable to write brightness value: {}",
                 e
             );
-            bail!(LedCtrlError::new(
-                LedCtrlErrorCodes::InvalidLedPathValueError,
+            bail!(LedctlError::new(
+                LedctlErrorCodes::InvalidLedPathValueError,
                 format!("unable to read brightness value: {}", e),
             ));
         }
