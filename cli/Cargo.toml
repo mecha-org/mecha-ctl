@@ -21,5 +21,5 @@ mecha_display_ctl = {path="../libs/display_ctl"}
 mecha_led_ctl = {path="../libs/led_ctl"}
 mecha_device_info_ctl = {path = "../libs/device-info-ctl"}
 mecha_metrics_ctl = {path = "../libs/device-metrics-ctl"}
-
+mecha-cpu-governor-ctl = {path = "../libs/cpu-governance-ctl"}
 

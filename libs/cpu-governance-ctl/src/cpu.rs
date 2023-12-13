@@ -3,7 +3,7 @@ use std::fs::{read_to_string, File};
 use std::io::Write;
 use tracing::{error as trace_error, info, instrument, trace, warn};
 
-use crate::{CpuCtlError, CpuCtlErrorCodes};
+use crate::{CpuGovernanceCtlError, CpuGovernanceCtlErrorCodes};
 
 #[derive(Debug)]
 pub enum CpuFrequency {
@@ -13,14 +13,14 @@ pub enum CpuFrequency {
 }
 
 #[derive(Debug)]
-pub struct CpuCtl {
+pub struct CpuGovernanceCtl {
     pub cpu_frequency_path: String,
 }
 
-impl CpuCtl {
+impl CpuGovernanceCtl {
     pub fn new() -> Self {
-        trace!(tack = "CpuCtl instace", "init");
-        CpuCtl {
+        trace!(tack = "CpuGovernanceCtl instace", "init");
+        CpuGovernanceCtl {
             cpu_frequency_path: String::from("/sys/devices/system/cpu/cpu0/cpufreq"),
         }
     }
@@ -33,8 +33,8 @@ impl CpuCtl {
                 info!(task = "set_cpu_governor", "set cpu governor to userspace");
                 file
             }
-            Err(e) => bail!(CpuCtlError::new(
-                CpuCtlErrorCodes::FailedToSetCpuGovernorPath,
+            Err(e) => bail!(CpuGovernanceCtlError::new(
+                CpuGovernanceCtlErrorCodes::FailedToSetCpuGovernorPath,
                 format!("failed to set CPU governor: {}", e)
             )),
         };
@@ -43,8 +43,8 @@ impl CpuCtl {
                 info!(task = "set_cpu_governor", "set cpu governor to userspace");
                 Ok(())
             }
-            Err(e) => bail!(CpuCtlError::new(
-                CpuCtlErrorCodes::FailedToSetCpuGovernor,
+            Err(e) => bail!(CpuGovernanceCtlError::new(
+                CpuGovernanceCtlErrorCodes::FailedToSetCpuGovernor,
                 format!("failed to set CPU governor: {}", e)
             )),
         }
@@ -63,8 +63,8 @@ impl CpuCtl {
                     "failed to get CPU governor: {}",
                     e
                 );
-                bail!(CpuCtlError::new(
-                    CpuCtlErrorCodes::FailedToGetCpuGovernor,
+                bail!(CpuGovernanceCtlError::new(
+                    CpuGovernanceCtlErrorCodes::FailedToGetCpuGovernor,
                     format!("failed to get CPU governor: {}", e)
                 ))
             }
@@ -81,8 +81,8 @@ impl CpuCtl {
                     "failed to get CPU frequency: {}",
                     e
                 );
-                bail!(CpuCtlError::new(
-                    CpuCtlErrorCodes::FailedToGetCpuFrequency,
+                bail!(CpuGovernanceCtlError::new(
+                    CpuGovernanceCtlErrorCodes::FailedToGetCpuFrequency,
                     format!("failed to get CPU frequency: {}", e)
                 ))
             }
@@ -111,8 +111,8 @@ impl CpuCtl {
                     "failed to set CPU frequency: {}",
                     e
                 );
-                bail!(CpuCtlError::new(
-                    CpuCtlErrorCodes::FailedToSetCpuFrequencyPath,
+                bail!(CpuGovernanceCtlError::new(
+                    CpuGovernanceCtlErrorCodes::FailedToSetCpuFrequencyPath,
                     format!("failed to set CPU frequency: {}", e)
                 ))
             }
@@ -130,8 +130,8 @@ impl CpuCtl {
                     task = "set_cpu_frequency",
                     "failed to set CPU frequency: {}", e
                 );
-                bail!(CpuCtlError::new(
-                    CpuCtlErrorCodes::FailedToSetCpuFrequency,
+                bail!(CpuGovernanceCtlError::new(
+                    CpuGovernanceCtlErrorCodes::FailedToSetCpuFrequency,
                     format!("failed to set CPU frequency: {}", e)
                 ))
             }
@@ -147,7 +147,7 @@ mod tests {
     use tempfile::tempdir;
     #[test]
     fn test_cpu_ctrl() {
-        let cpu_ctrl = CpuCtl::new();
+        let cpu_ctrl = CpuGovernanceCtl::new();
         assert_eq!(
             cpu_ctrl.cpu_frequency_path,
             "/sys/devices/system/cpu/cpu0/cpufreq"
@@ -160,7 +160,7 @@ mod tests {
         let cpu_frequency_path = dir.path().join("cpu_frequency_path");
         fs::create_dir(&cpu_frequency_path).unwrap();
 
-        let cpu_ctrl = CpuCtl {
+        let cpu_ctrl = CpuGovernanceCtl {
             cpu_frequency_path: cpu_frequency_path.to_str().unwrap().to_string(),
         };
 
@@ -181,7 +181,7 @@ mod tests {
         let cpu_frequency_path = dir.path().join("cpu_frequency_path");
         fs::create_dir(&cpu_frequency_path).unwrap();
 
-        let cpu_ctrl = CpuCtl {
+        let cpu_ctrl = CpuGovernanceCtl {
             cpu_frequency_path: cpu_frequency_path.to_str().unwrap().to_string(),
         };
 
@@ -201,7 +201,7 @@ mod tests {
         let cpu_frequency_path = dir.path().join("cpu_frequency_path");
         fs::create_dir(&cpu_frequency_path).unwrap();
 
-        let cpu_ctrl = CpuCtl {
+        let cpu_ctrl = CpuGovernanceCtl {
             cpu_frequency_path: cpu_frequency_path.to_str().unwrap().to_string(),
         };
 
@@ -221,7 +221,7 @@ mod tests {
         let cpu_frequency_path = dir.path().join("cpu_frequency_path");
         fs::create_dir(&cpu_frequency_path).unwrap();
 
-        let cpu_ctrl = CpuCtl {
+        let cpu_ctrl = CpuGovernanceCtl {
             cpu_frequency_path: cpu_frequency_path.to_str().unwrap().to_string(),
         };
 

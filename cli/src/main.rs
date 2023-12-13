@@ -22,6 +22,10 @@ pub use led::Led;
 mod device_info;
 pub use device_info::DeviceInfo;
 
+mod cpu_governanace;
+pub use cpu_governanace::CpuGoverner;
+
+
 #[derive(Debug, Parser)]
 #[command(name = "mecha")]
 #[command(about = "A fictional Mecha CLI", long_about = None)]
@@ -44,6 +48,8 @@ enum Mecha {
     Led(Led),
     #[command(about = "Device Info utility")]
     DeviceInfo(DeviceInfo),
+    #[command(about = "Device Cpu Governence utility")]
+    CpuGoverner(CpuGoverner),
 }
 
 #[tokio::main]
@@ -86,6 +92,13 @@ async fn main() -> Result<()> {
         },
         
         Mecha::DeviceInfo(device_info) => match device_info.execute().await {
+            Ok(_) => {}
+            Err(e) => {
+                println!("Error: {}", e);
+            }
+        },
+
+        Mecha::CpuGoverner(cpu_governer) => match cpu_governer.execute().await {
             Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);

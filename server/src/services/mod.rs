@@ -18,3 +18,6 @@ pub use device_info_service::{DeviceInfoCtlServiceServer,DeviceInfoCtl};
 
 mod metrics_service;
 pub use metrics_service::{MetricsServiceServer,DeviceMetricsService};
+
+mod cpu_ctl_service;
+pub use cpu_ctl_service::{CpuCtlService,CpuGovernorCtlServiceServer};

@@ -1,4 +1,5 @@
 use anyhow::{bail, Result};
+use mecha_cpu_governor_ctl::CpuGovernanceCtl;
 use mecha_metrics_ctl::DeviceMetricsCtl;
 use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
 use std::{fs::File, io::BufReader};
@@ -13,6 +14,7 @@ use crate::configs::BaseConfig;
 mod services;
 use crate::services::{Battery, BatteryControl, PowerSupplyServiceServer};
 use crate::services::{Bluetooth, BluetoothServiceServer};
+use crate::services::{CpuCtlService, CpuGovernorCtlServiceServer};
 use crate::services::{DeviceInfoCtl, DeviceInfoCtlServiceServer};
 use crate::services::{DeviceMetricsService, MetricsServiceServer};
 use crate::services::{NetworkManager, NetworkManagerServiceServer};
@@ -47,9 +49,13 @@ async fn main() -> Result<()> {
     println!("device info service: {:?}", device_info);
 
     //device metrics service
-    //device metrics service
     let device_metrics = DeviceMetricsService {
         metrics: DeviceMetricsCtl::new(),
+    };
+
+    //cpu governor service
+    let cpu_ctl = CpuCtlService {
+        cpu_ctrl_manager: CpuGovernanceCtl::new(),
     };
 
     println!("Mecha Edge Server listening on {}", addr);
@@ -72,6 +78,7 @@ async fn main() -> Result<()> {
         .add_service(BluetoothServiceServer::new(Bluetooth::default()))
         .add_service(DeviceInfoCtlServiceServer::new(device_info))
         .add_service(MetricsServiceServer::new(device_metrics))
+        .add_service(CpuGovernorCtlServiceServer::new(cpu_ctl))
         .serve(addr)
         .await?;
 

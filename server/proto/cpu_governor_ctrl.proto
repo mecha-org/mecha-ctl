@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package cpugovernorctrl;
+package cpugovernorctl;
 
-service CPUGovernorCtrlService {
+service CpuGovernorCtlService {
   rpc SetGovernor (GovernorRequest) returns (Empty) {}
   rpc GetGovernor (Empty) returns (GovernorResponse) {}
   rpc SetCPUFrequency (CPUFrequencyRequest) returns (Empty) {}
