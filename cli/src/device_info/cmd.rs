@@ -1,7 +1,7 @@
 use anyhow::{bail, Result};
 use clap::{Args, Subcommand};
 
-use mecha_device_info_ctl::{DeviceInfoCtl, DeviceInfoCtlError, DeviceInfoCtlErrorCodes};
+use mecha_device_info_ctl::{DeviceInfoControl, DeviceInfoCtlError, DeviceInfoCtlErrorCodes};
 use mecha_metrics_ctl::{DeviceMetricsCtl, DeviceMetricsCtlError, DeviceMetricsCtlErrorCodes};
 
 #[derive(Debug, Args)]
@@ -63,7 +63,7 @@ enum StorageCommands {
 
 impl DeviceInfo {
     pub async fn execute(&self) -> Result<()> {
-        let device_info = DeviceInfoCtl::new();
+        let device_info = DeviceInfoControl::new();
         let device_matrics = DeviceMetricsCtl::new();
         match &self.command {
             DeviceInfoCommands::Cpu(cpu) => {

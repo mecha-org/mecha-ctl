@@ -29,11 +29,11 @@ pub struct DiskInfo {
 }
 
 #[derive(Debug, Default)]
-pub struct DeviceInfoCtl {}
+pub struct DeviceInfoControl {}
 
-impl DeviceInfoCtl {
+impl DeviceInfoControl {
     pub fn new() -> Self {
-        DeviceInfoCtl {}
+        DeviceInfoControl {}
     }
 
     #[instrument(skip(self))]
@@ -173,7 +173,7 @@ mod tests {
         mock.expect_free_memory().returning(|| 2000);
         mock.expect_available_memory().returning(|| 3000);
 
-        // let device_info = DeviceInfoCtl::new();
+        // let device_info = DeviceInfoControl::new();
         let memory_info = MemoryInfo {
             total_memory: mock.total_memory(),
             free_memory: mock.free_memory(),

@@ -12,3 +12,9 @@ pub use display_ctl_service::{DisplayControl,DisplayCtrlServiceServer};
 
 mod led_ctl_service;
 pub use led_ctl_service::{LedctlServiceServer,LedControl};
+
+mod device_info_service;
+pub use device_info_service::{DeviceInfoCtlServiceServer,DeviceInfoCtl};
+
+mod metrics_service;
+pub use metrics_service::{MetricsServiceServer,DeviceMetricsService};

@@ -68,7 +68,8 @@ impl NetworkManager {
     }
 
     async fn connect_to_wifi(&self, ssid: &str, psk: &str) -> Result<(), &str> {
-        let connect_wireless_network_list = WirelessNetworkControl::connect_wireless_network(ssid, psk).await;
+        let connect_wireless_network_list =
+            WirelessNetworkControl::connect_wireless_network(ssid, psk).await;
 
         match connect_wireless_network_list {
             Ok(_) => Ok(()),
@@ -167,13 +168,14 @@ impl NetworkManagerService for NetworkManager {
         log::info!("Starting Known Wifi List Function");
 
         //get wifi list from mecha_edge_sdk
-        let wireless_network_list = match WirelessNetworkControl::get_known_wireless_networks().await {
-            Ok(wireless_network_list) => wireless_network_list,
-            Err(err) => {
-                // Convert the error into a gRPC Status and return it.
-                return Err(Status::from_error(err.into()));
-            }
-        };
+        let wireless_network_list =
+            match WirelessNetworkControl::get_known_wireless_networks().await {
+                Ok(wireless_network_list) => wireless_network_list,
+                Err(err) => {
+                    // Convert the error into a gRPC Status and return it.
+                    return Err(Status::from_error(err.into()));
+                }
+            };
         //add wifi list to scan_results
         for wifi in wireless_network_list {
             let scan_result = NetworkResult {
@@ -192,7 +194,7 @@ impl NetworkManagerService for NetworkManager {
         _request: Request<Empty>,
     ) -> Result<Response<WifiStatusResponse>, Status> {
         // Implement your logic to check Wi-Fi status here
-        let wifi_on = WirelessNetworkControl::wireless_network_status(); // This should return true if Wi-Fi is on, false otherwise.
+        let wifi_on = WirelessNetworkControl::wireless_network_status().await; // This should return true if Wi-Fi is on, false otherwise.
 
         let wifi_status_response = WifiStatusResponse { wifi_on };
 
@@ -220,8 +222,7 @@ impl NetworkManagerService for NetworkManager {
             flags: current_network.flags,
             name: current_network.name,
         };
- 
+
         Ok(Response::new(scan_result))
     }
 }
-

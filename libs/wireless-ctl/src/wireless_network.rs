@@ -13,7 +13,7 @@ impl WirelessNetworkControl {
         Self
     }
 
-    pub fn wireless_network_status() -> bool {
+    pub async fn wireless_network_status() -> bool {
         trace!(task = "wireless_network_status", "checking wireless network status");
         let output = Command::new("ifconfig")
             .output()

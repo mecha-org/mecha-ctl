@@ -26,6 +26,9 @@ enum NetworkCommand {
 
     #[command(about = "Connect to a wireless network")]
     Connect(WirelessConnectArgs),
+
+    #[command(about = "Status of current network")]
+    Status,
 }
 
 #[derive(Debug, Args)]
@@ -111,6 +114,16 @@ impl Network {
                         return Err(e);
                     }
                 };
+            }
+
+            NetworkCommand::Status => {
+                let connected = WirelessNetworkControl::wireless_network_status().await;
+
+                if connected {
+                    println!("Wireless network is connected.");
+                } else {
+                    println!("Wireless network is not connected.");
+                }
             }
         }
 

@@ -1,4 +1,5 @@
 use anyhow::{bail, Result};
+use mecha_metrics_ctl::DeviceMetricsCtl;
 use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
 use std::{fs::File, io::BufReader};
 use tracing::{info, Level};
@@ -12,12 +13,14 @@ use crate::configs::BaseConfig;
 mod services;
 use crate::services::{Battery, BatteryControl, PowerSupplyServiceServer};
 use crate::services::{Bluetooth, BluetoothServiceServer};
+use crate::services::{DeviceInfoCtl, DeviceInfoCtlServiceServer};
+use crate::services::{DeviceMetricsService, MetricsServiceServer};
 use crate::services::{NetworkManager, NetworkManagerServiceServer};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let profile_file =
-        File::open("./mecha-ctl/server/Config.yml").expect("Failed to open config file");
+    let profile_file = File::open("/home/jack/mecha/rust/mecha-ctl/server/Config.yml")
+        .expect("Failed to open config file");
     let reader = BufReader::new(profile_file);
 
     let config: BaseConfig = serde_yaml::from_reader(reader).expect("unable to rad yaml file");
@@ -39,7 +42,15 @@ async fn main() -> Result<()> {
     //network manager service
     let network_service = NetworkManager::default();
 
-    //bluetooth service
+    //device info service
+    let device_info = DeviceInfoCtl::default();
+    println!("device info service: {:?}", device_info);
+
+    //device metrics service
+    //device metrics service
+    let device_metrics = DeviceMetricsService {
+        metrics: DeviceMetricsCtl::new(),
+    };
 
     println!("Mecha Edge Server listening on {}", addr);
 
@@ -59,6 +70,8 @@ async fn main() -> Result<()> {
         .add_service(PowerSupplyServiceServer::new(power_supply))
         .add_service(NetworkManagerServiceServer::new(network_service))
         .add_service(BluetoothServiceServer::new(Bluetooth::default()))
+        .add_service(DeviceInfoCtlServiceServer::new(device_info))
+        .add_service(MetricsServiceServer::new(device_metrics))
         .serve(addr)
         .await?;
 
