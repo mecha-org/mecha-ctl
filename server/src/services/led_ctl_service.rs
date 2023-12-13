@@ -13,7 +13,7 @@ pub use ledmanager::{
 };
 
 pub struct LedctlManager {
-    pub led_ctrl: LedControl,
+    pub led_ctl: LedControl,
 }
 
 #[tonic::async_trait]
@@ -32,7 +32,7 @@ impl LedctlService for LedctlManager {
         let blue_value = if blue { 1 } else { 0 };
 
         match self
-            .led_ctrl
+            .led_ctl
             .set_led(red_value as u8, green_value as u8, blue_value as u8)
         {
             Ok(_) => Ok(Response::new(Empty {})),
@@ -54,7 +54,7 @@ impl LedctlService for LedctlManager {
         let blue_value = if blue { 1 } else { 0 };
 
         match self
-            .led_ctrl
+            .led_ctl
             .set_led(red_value as u8, green_value as u8, blue_value as u8)
         {
             Ok(_) => Ok(Response::new(Empty {})),

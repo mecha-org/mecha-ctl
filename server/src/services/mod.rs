@@ -11,7 +11,7 @@ mod display_ctl_service;
 pub use display_ctl_service::{DisplayControl,DisplayCtrlServiceServer};
 
 mod led_ctl_service;
-pub use led_ctl_service::{LedctlServiceServer,LedControl};
+pub use led_ctl_service::{LedctlServiceServer,LedControl,LedctlManager};
 
 mod device_info_service;
 pub use device_info_service::{DeviceInfoCtlServiceServer,DeviceInfoCtl};

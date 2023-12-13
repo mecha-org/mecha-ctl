@@ -1,5 +1,6 @@
 use anyhow::{bail, Result};
 use mecha_cpu_governor_ctl::CpuGovernanceCtl;
+use mecha_led_ctl::LedControl;
 use mecha_metrics_ctl::DeviceMetricsCtl;
 use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
 use std::{fs::File, io::BufReader};
@@ -17,6 +18,7 @@ use crate::services::{Bluetooth, BluetoothServiceServer};
 use crate::services::{CpuCtlService, CpuGovernorCtlServiceServer};
 use crate::services::{DeviceInfoCtl, DeviceInfoCtlServiceServer};
 use crate::services::{DeviceMetricsService, MetricsServiceServer};
+use crate::services::{LedctlManager, LedctlServiceServer};
 use crate::services::{NetworkManager, NetworkManagerServiceServer};
 
 #[tokio::main]
@@ -58,6 +60,18 @@ async fn main() -> Result<()> {
         cpu_ctrl_manager: CpuGovernanceCtl::new(),
     };
 
+    //led manager service
+    let led_service = LedControl::new(
+        config.interfaces.led.red_led.as_str(),
+        config.interfaces.led.green_led.as_str(),
+        config.interfaces.led.blue_led.as_str(),
+    );
+
+    //device led service
+    let led_ctl = LedctlManager {
+        led_ctl: led_service,
+    };
+
     println!("Mecha Edge Server listening on {}", addr);
 
     let subscriber = tracing_subscriber::fmt()
@@ -79,6 +93,7 @@ async fn main() -> Result<()> {
         .add_service(DeviceInfoCtlServiceServer::new(device_info))
         .add_service(MetricsServiceServer::new(device_metrics))
         .add_service(CpuGovernorCtlServiceServer::new(cpu_ctl))
+        .add_service(LedctlServiceServer::new(led_ctl))
         .serve(addr)
         .await?;
 
