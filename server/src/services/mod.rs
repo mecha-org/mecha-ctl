@@ -21,3 +21,6 @@ pub use metrics_service::{MetricsServiceServer,DeviceMetricsService};
 
 mod cpu_ctl_service;
 pub use cpu_ctl_service::{CpuCtlService,CpuGovernorCtlServiceServer};
+
+mod motion_sensor_service;
+pub use motion_sensor_service::{MotionSensorManager,MotionSensorServiceServer,MotionSensorControl};

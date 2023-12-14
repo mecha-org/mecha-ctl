@@ -25,6 +25,9 @@ pub use device_info::DeviceInfo;
 mod cpu_governanace;
 pub use cpu_governanace::CpuGoverner;
 
+mod motion_sensor;
+pub use motion_sensor::MotionSensor;
+
 
 #[derive(Debug, Parser)]
 #[command(name = "mecha")]
@@ -50,6 +53,8 @@ enum Mecha {
     DeviceInfo(DeviceInfo),
     #[command(about = "Device Cpu Governence utility")]
     CpuGoverner(CpuGoverner),
+    #[command(about = "Device motion sensor utility")]
+    MotionSensor(MotionSensor),
 }
 
 #[tokio::main]
@@ -99,6 +104,13 @@ async fn main() -> Result<()> {
         },
 
         Mecha::CpuGoverner(cpu_governer) => match cpu_governer.execute().await {
+            Ok(_) => {}
+            Err(e) => {
+                println!("Error: {}", e);
+            }
+        },
+
+        Mecha::MotionSensor(motion_sensor) => match motion_sensor.execute().await {
             Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);

@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package motionsensor;
+package MotionSensorControl;
 
 
-service MotionSensorService {
+service MotionSensorControlService {
   rpc ReadValue (Empty) returns (ReadValueResponse) {}
   rpc DetectMotion (Empty) returns (DetectEventResponse) {}
 }
