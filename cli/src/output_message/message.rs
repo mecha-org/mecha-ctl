@@ -20,7 +20,7 @@ pub trait Message {
     }
 
     fn success(msg: &str) {
-        let msg = format!("{} {}", emoji::INFO, msg);
+        let msg = format!("{} {}", emoji::SUCCESS, msg);
         Self::message(&msg);
     }
 

@@ -1,9 +1,12 @@
 use anyhow::{bail, Result};
 use clap::{Args, Subcommand};
 
+use console::Emoji;
 use mecha_cpu_governor_ctl::{
     CpuFrequency, CpuGovernanceCtl, CpuGovernanceCtlError, CpuGovernanceCtlErrorCodes,
 };
+
+use crate::output_message::{Message, StdOut};
 
 #[derive(Debug, Args)]
 pub struct CpuGoverner {
@@ -31,7 +34,7 @@ impl CpuGoverner {
         match &self.command {
             CpuGovernerCommands::GetFrequency => match cpu_governer_control.get_cpu_frequency() {
                 Ok(frequency) => {
-                    println!("Current frequency is {}", frequency);
+                    StdOut::info(&format!("Cpu frequncy : {}", frequency), None);
                 }
                 Err(e) => {
                     bail!(CpuGovernanceCtlError::new(
@@ -43,7 +46,9 @@ impl CpuGoverner {
             CpuGovernerCommands::SetFrequency(frequency) => {
                 match cpu_governer_control.set_cpu_frequency(CpuFrequency::Freq1200000) {
                     Ok(_) => {
-                        println!("Set frequency to {}", frequency.frequency);
+                        StdOut::success(
+                            format!("Cpu frequncy set to : {}", frequency.frequency).as_str(),
+                        );
                     }
                     Err(e) => {
                         bail!(CpuGovernanceCtlError::new(
