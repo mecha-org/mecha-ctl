@@ -13,12 +13,14 @@ pub mod motionsensor {
 }
 
 pub use motionsensor::{
-    motion_sensor_service_server::{MotionSensorService, MotionSensorServiceServer},
+    motion_sensor_control_service_server::{
+        MotionSensorControlService, MotionSensorControlServiceServer,
+    },
     DetectEventResponse, Empty, ReadValueResponse,
 };
 
 #[tonic::async_trait]
-impl MotionSensorService for MotionSensorManager {
+impl MotionSensorControlService for MotionSensorManager {
     async fn read_value(
         &self,
         _request: Request<Empty>,

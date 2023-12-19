@@ -1,5 +1,5 @@
 mod battery_ctl_service;
-pub use battery_ctl_service::{BatteryControl, PowerSupplyServiceServer,Battery};
+pub use battery_ctl_service::{Battery, BatteryControl, PowerSupplyServiceServer};
 
 mod bluetooth_ctl_service;
 pub use bluetooth_ctl_service::{Bluetooth, BluetoothServiceServer};
@@ -8,19 +8,21 @@ mod network_ctl_service;
 pub use network_ctl_service::{NetworkManager, NetworkManagerServiceServer};
 
 mod display_ctl_service;
-pub use display_ctl_service::{DisplayControl,DisplayCtrlServiceServer};
+pub use display_ctl_service::{DisplayControl, DisplayCtrlServiceServer};
 
 mod led_ctl_service;
-pub use led_ctl_service::{LedctlServiceServer,LedControl,LedctlManager};
+pub use led_ctl_service::{LedControl, LedctlManager, LedctlServiceServer};
 
 mod device_info_service;
-pub use device_info_service::{DeviceInfoCtlServiceServer,DeviceInfoCtl};
+pub use device_info_service::{DeviceInfoCtl, DeviceInfoCtlServiceServer};
 
 mod metrics_service;
-pub use metrics_service::{MetricsServiceServer,DeviceMetricsService};
+pub use metrics_service::{DeviceMetricsService, MetricsServiceServer};
 
 mod cpu_ctl_service;
-pub use cpu_ctl_service::{CpuCtlService,CpuGovernorCtlServiceServer};
+pub use cpu_ctl_service::{CpuCtlService, CpuGovernorCtlServiceServer};
 
 mod motion_sensor_service;
-pub use motion_sensor_service::{MotionSensorManager,MotionSensorServiceServer,MotionSensorControl};
+pub use motion_sensor_service::{
+    MotionSensorControlService, MotionSensorControlServiceServer, MotionSensorManager,
+};

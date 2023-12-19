@@ -2,6 +2,7 @@ use anyhow::{bail, Result};
 use mecha_cpu_governor_ctl::CpuGovernanceCtl;
 use mecha_led_ctl::LedControl;
 use mecha_metrics_ctl::DeviceMetricsCtl;
+use mecha_motion_sensor_ctl::MotionSensorControl;
 use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
 use std::{fs::File, io::BufReader};
 use tracing::{info, Level};
@@ -19,7 +20,7 @@ use crate::services::{CpuCtlService, CpuGovernorCtlServiceServer};
 use crate::services::{DeviceInfoCtl, DeviceInfoCtlServiceServer};
 use crate::services::{DeviceMetricsService, MetricsServiceServer};
 use crate::services::{LedctlManager, LedctlServiceServer};
-use crate::services::{MotionSensorControl, MotionSensorManager, MotionSensorServiceServer};
+use crate::services::{MotionSensorControlServiceServer, MotionSensorManager};
 use crate::services::{NetworkManager, NetworkManagerServiceServer};
 
 #[tokio::main]
@@ -73,14 +74,13 @@ async fn main() -> Result<()> {
         led_ctl: led_service,
     };
 
-
     //motion sensor
     let motion_sensor = MotionSensorControl::new(
         config.interfaces.motion_sensor.x_axis.as_str(),
         config.interfaces.motion_sensor.y_axis.as_str(),
         config.interfaces.motion_sensor.z_axis.as_str(),
     );
-    
+
     //motion sensor service
     let motion_senso_service = MotionSensorManager {
         motion_sensor: motion_sensor,
@@ -108,7 +108,7 @@ async fn main() -> Result<()> {
         .add_service(MetricsServiceServer::new(device_metrics))
         .add_service(CpuGovernorCtlServiceServer::new(cpu_ctl))
         .add_service(LedctlServiceServer::new(led_ctl))
-        .add_service(MotionSensorServiceServer::new(motion_senso_service))
+        .add_service(MotionSensorControlServiceServer::new(motion_senso_service))
         .serve(addr)
         .await?;
 
