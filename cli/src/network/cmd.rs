@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::{Args, Subcommand};
 
 pub use crate::network::{NetworkError, NetworkErrorCodes};
+use crate::output_message::{Message, StdOut, WIFI};
 pub use mecha_network_ctl::wireless_network::WirelessNetworkControl;
 
 #[derive(Debug, Args)]
@@ -63,9 +64,12 @@ impl Network {
                 let _scan_results = match network_module.scan_wireless_network().await {
                     Ok(scan_results) => {
                         scan_results.iter().for_each(|network| {
-                            println!(
-                                "Network SSID: {}, Signal Strength: {}",
-                                network.name, network.flags
+                            StdOut::info(
+                                &format!(
+                                    "Network SSID: {}, Signal Strength: {}, GHz: {}",
+                                    network.name, network.signal, network.frequency
+                                ),
+                                Some(WIFI),
                             );
                         });
                         scan_results
@@ -84,7 +88,7 @@ impl Network {
                 )
                 .await
                 {
-                    Ok(()) => (),
+                    Ok(()) => (StdOut::success(&format!("Added network: {}", ssid))),
                     Err(e) => {
                         return Err(e);
                     }
@@ -96,7 +100,10 @@ impl Network {
 
                 // use args and use remove_wireless_network
                 let _ = match WirelessNetworkControl::remove_wireless_network(network_id).await {
-                    Ok(remove_results) => remove_results,
+                    Ok(remove_results) => {
+                        StdOut::success(&format!("Removed network: {:?}", remove_results));
+                        remove_results
+                    }
                     Err(e) => {
                         return Err(e);
                     }
@@ -109,7 +116,10 @@ impl Network {
                 )
                 .await
                 {
-                    Ok(connect_results) => connect_results,
+                    Ok(connect_results) => {
+                        StdOut::success(&format!("Connected to network: {:?}", connect_results));
+                        connect_results
+                    }
                     Err(e) => {
                         return Err(e);
                     }
@@ -120,7 +130,7 @@ impl Network {
                 let connected = WirelessNetworkControl::wireless_network_status().await;
 
                 if connected {
-                    println!("Wireless network is connected.");
+                    StdOut::success("Wireless network is connected.");
                 } else {
                     println!("Wireless network is not connected.");
                 }
