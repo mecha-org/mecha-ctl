@@ -28,6 +28,8 @@ pub use cpu_governanace::CpuGoverner;
 mod motion_sensor;
 pub use motion_sensor::MotionSensor;
 
+mod output_message;
+
 
 #[derive(Debug, Parser)]
 #[command(name = "mecha")]
