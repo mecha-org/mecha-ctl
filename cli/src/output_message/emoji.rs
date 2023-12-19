@@ -20,3 +20,5 @@ pub static FAIL: Emoji = Emoji("❌ ", "");
 pub static WARNING: Emoji = Emoji("⚠️ ", "");
 //info
 pub static INFO: Emoji = Emoji("✨ ", "");
+//battery
+pub static BATTERY: Emoji = Emoji("🔋 ", "");

@@ -5,6 +5,8 @@ pub use mecha_battery_ctl::{Battery as Power, PowerSupplyInfo};
 
 use crate::battery::{BatteryError, BatteryErrorCodes};
 
+use crate::output_message::{Message, StdOut, BATTERY};
+
 #[derive(Debug, Args)]
 pub struct Battery {
     #[command(subcommand)]
@@ -27,7 +29,9 @@ impl Battery {
                 };
 
                 let _ = match battery.info() {
-                    Ok(power) => power,
+                    Ok(power) => {
+                        StdOut::info(&format!("Battery info : {:?}", power), Some(BATTERY));
+                    }
                     Err(err) => {
                         println!("Error: {}", err);
                         bail!(BatteryError::new(
