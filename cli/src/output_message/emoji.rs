@@ -22,3 +22,9 @@ pub static WARNING: Emoji = Emoji("⚠️ ", "");
 pub static INFO: Emoji = Emoji("✨ ", "");
 //battery
 pub static BATTERY: Emoji = Emoji("🔋 ", "");
+//bluetooth
+pub static BLUETOOTH: Emoji = Emoji("🎧 ", "");
+//disconnect
+pub static DISCONNECT: Emoji = Emoji("🔌 ", "");
+//connection
+pub static CONNECTION: Emoji = Emoji("🔗 ", "");

@@ -1,10 +1,11 @@
 #![deny(clippy::all)]
-use anyhow::{Result,bail};
+use anyhow::{bail, Result};
 use clap::{Args, Subcommand};
 
-
-pub use mecha_bluetooth_ctl::{BluetoothControl,BluetoothErrorCodes as BluetoothSDKErrorCode};
 use crate::bluetooth::{BluetoothError, BluetoothErrorCodes};
+pub use mecha_bluetooth_ctl::{BluetoothControl, BluetoothErrorCodes as BluetoothSDKErrorCode};
+
+use crate::output_message::{Message, StdOut, BLUETOOTH, CONNECTION, DISCONNECT};
 
 #[derive(Debug, Args)]
 #[command(name = "bluetooth")]
@@ -50,7 +51,7 @@ struct BluetoothDisconnectArgs {
 }
 
 impl Bluetooth {
-    pub async fn execute(&self) -> Result<()> { 
+    pub async fn execute(&self) -> Result<()> {
         let controller = match BluetoothControl::new().await {
             Ok(controller) => controller,
             Err(err) => {
@@ -63,55 +64,55 @@ impl Bluetooth {
         };
         match &self.command {
             BluetoothCommand::Scan => {
-                println!("Scanning for bluetooth devices...");
+                StdOut::info(&format!("Bluetooth  Scan"), Some(BLUETOOTH));
             }
             BluetoothCommand::Connect(args) => {
-                println!(
-                    "Connecting to bluetooth device with address: {}",
-                    args.address
+                StdOut::info(
+                    &format!("Bluetooth  Connected to {}", args.address),
+                    Some(CONNECTION),
                 );
             }
             BluetoothCommand::Disconnect(args) => {
-                println!(
-                    "Disconnecting from bluetooth device with address: {}",
-                    args.address
+                StdOut::info(
+                    &format!("Bluetooth  Disconnect {}", args.address),
+                    Some(DISCONNECT),
                 );
             }
             BluetoothCommand::Status => match controller.bluetooth_status().await {
                 Ok(status) => {
-                    println!("Bluetooth status: {}", status);
+                    StdOut::info(&format!("Bluetooth  status: {}", status), Some(BLUETOOTH));
                 }
                 Err(e) => {
-                  bail!(BluetoothError::new(
-                    BluetoothErrorCodes::UnableToDetectBluetooth,
-                    "unable to detect bluetooth".to_string()))
+                    bail!(BluetoothError::new(
+                        BluetoothErrorCodes::UnableToDetectBluetooth,
+                        "unable to detect bluetooth".to_string()
+                    ))
                 }
-            
             },
-            
+
             BluetoothCommand::On => match controller.enable_bluetooth().await {
                 Ok(_) => {
-                    println!("Bluetooth turned on");
+                    StdOut::success("Bluetooth turned on");
                 }
                 Err(e) => {
                     bail!(BluetoothError::new(
                         BluetoothErrorCodes::UnableToConnectBluetooth,
-                        "unable to connect bluetooth".to_string()))
-                    }
-                },
-            
-            
+                        "unable to connect bluetooth".to_string()
+                    ))
+                }
+            },
 
-            BluetoothCommand::Off =>  match controller.disable_bluetooth().await {
+            BluetoothCommand::Off => match controller.disable_bluetooth().await {
                 Ok(_) => {
-                    println!("Bluetooth turned on");
+                    StdOut::success("Bluetooth turned off");
                 }
                 Err(e) => {
                     bail!(BluetoothError::new(
                         BluetoothErrorCodes::UnableToConnectBluetooth,
-                        "unable to connect bluetooth".to_string()))
-                    }
-                },
+                        "unable to connect bluetooth".to_string()
+                    ))
+                }
+            },
         }
         Ok(())
     }
