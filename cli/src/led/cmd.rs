@@ -4,6 +4,8 @@ use clap::{Args, Subcommand};
 // use crate::led::led_interface::LedManagerClient;
 pub use mecha_led_ctl::{LedControl, LedctlError, LedctlErrorCodes};
 
+use crate::output_message::{Message, StdOut, LED_COLOR, LIGHT_OFF};
+
 //create led args
 #[derive(Debug, Args)]
 pub struct Led {
@@ -45,7 +47,9 @@ impl Led {
                 let blue = rgb_values[2].parse::<u8>()? != 0;
 
                 let _ = match led.set_led(red as u8, green as u8, blue as u8) {
-                    Ok(_) => {}
+                    Ok(_) => {
+                        StdOut::info("Led set", Some(LED_COLOR));
+                    }
                     Err(e) => {
                         bail!(LedctlError::new(
                             LedctlErrorCodes::InvalidLedPathValueError,
@@ -64,7 +68,9 @@ impl Led {
                 let blue = rgb_values[2].parse::<u8>()? != 0;
 
                 let _ = match led.set_led(red as u8, green as u8, blue as u8) {
-                    Ok(_) => {}
+                    Ok(_) => {
+                        StdOut::info("Led cleared", Some(LIGHT_OFF));
+                    }
                     Err(e) => {
                         bail!(LedctlError::new(
                             LedctlErrorCodes::InvalidLedColorError,

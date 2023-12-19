@@ -32,4 +32,11 @@ pub static CONNECTION: Emoji = Emoji("🔗 ", "");
 pub static DISPLAY: Emoji = Emoji("🖥️ ", "");
 //brightness
 pub static BRIGHTNESS: Emoji = Emoji("🔆 ", "");
-
+//led
+pub static LED: Emoji = Emoji("💡 ", "");
+//led color
+pub static LED_COLOR: Emoji = Emoji("🎨 ", "");
+//light off
+pub static LIGHT_OFF: Emoji = Emoji("🚫 ", "");
+//motion
+pub static MOTION: Emoji = Emoji("🎳 ", "");
