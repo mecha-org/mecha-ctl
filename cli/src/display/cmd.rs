@@ -5,6 +5,8 @@ use tracing_subscriber::field::display;
 
 use crate::display::{DisplayError, DisplayErrorCodes};
 
+use crate::output_message::{Message, StdOut, BRIGHTNESS, DISPLAY};
+
 #[derive(Debug, Args)]
 pub struct Display {
     #[command(subcommand)]
@@ -46,13 +48,19 @@ impl Display {
                     }
                 };
 
-                println!("Current brightness: {}", brightness);
+                StdOut::info(
+                    &format!("Current display brightness {}", brightness),
+                    Some(DISPLAY),
+                );
                 Ok(())
             }
             DisplayCommands::SetBrightness { brightness } => {
                 match display.set_display_brightness(*brightness) {
                     Ok(_) => {
-                        println!("Brightness set to {}", brightness);
+                        StdOut::info(
+                            &format!("Display brightbess set to {}", brightness),
+                            Some(BRIGHTNESS),
+                        );
                         Ok(())
                     }
                     Err(err) => {

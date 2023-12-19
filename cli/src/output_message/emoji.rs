@@ -28,3 +28,8 @@ pub static BLUETOOTH: Emoji = Emoji("🎧 ", "");
 pub static DISCONNECT: Emoji = Emoji("🔌 ", "");
 //connection
 pub static CONNECTION: Emoji = Emoji("🔗 ", "");
+//display
+pub static DISPLAY: Emoji = Emoji("🖥️ ", "");
+//brightness
+pub static BRIGHTNESS: Emoji = Emoji("🔆 ", "");
+
