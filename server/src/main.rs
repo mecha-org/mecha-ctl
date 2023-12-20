@@ -1,4 +1,4 @@
-use anyhow::{bail, Result};
+use anyhow::Result;
 use mecha_cpu_governor_ctl::CpuGovernanceCtl;
 use mecha_led_ctl::LedControl;
 use mecha_metrics_ctl::DeviceMetricsCtl;

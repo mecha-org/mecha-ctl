@@ -3,7 +3,10 @@ use clap::{Args, Subcommand};
 
 pub use mecha_motion_sensor_ctl::MotionSensorControl;
 
-use crate::output_message::{Message, StdOut, MOTION};
+use crate::{
+    configs::BaseConfig,
+    output_message::{Message, StdOut, MOTION},
+};
 
 #[derive(Debug, Args)]
 pub struct MotionSensor {
@@ -20,12 +23,12 @@ enum MotionSensorCommands {
 }
 
 impl MotionSensor {
-    pub async fn execute(&self) -> Result<()> {
-        let motion_sensor = MotionSensorControl::new(
-            "/sys/bus/iio/devices/iio:device0/in_accel_x_raw",
-            "/sys/bus/iio/devices/iio:device0/in_accel_y_raw",
-            "/sys/bus/iio/devices/iio:device0/in_accel_z_raw",
-        );
+    pub async fn execute(&self, config: &BaseConfig) -> Result<()> {
+        let x_axis_path = config.interfaces.motion_sensor.x_axis.clone();
+        let y_axis_path = config.interfaces.motion_sensor.y_axis.clone();
+        let z_axis_path = config.interfaces.motion_sensor.z_axis.clone();
+
+        let motion_sensor = MotionSensorControl::new(&x_axis_path, &y_axis_path, &z_axis_path);
 
         match &self.command {
             MotionSensorCommands::Value => match motion_sensor.read_motion_sensor_value() {

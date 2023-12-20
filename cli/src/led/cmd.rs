@@ -6,6 +6,8 @@ pub use mecha_led_ctl::{LedControl, LedctlError, LedctlErrorCodes};
 
 use crate::output_message::{Message, StdOut, LED_COLOR, LIGHT_OFF};
 
+use crate::configs::BaseConfig;
+
 //create led args
 #[derive(Debug, Args)]
 pub struct Led {
@@ -29,12 +31,13 @@ struct LedArgs {
 }
 
 impl Led {
-    pub async fn execute(&self) -> Result<()> {
-        let led = LedControl::new(
-            "/path/to/red/led",
-            "/path/to/green/led",
-            "/path/to/blue/led",
-        );
+    pub async fn execute(&self, config: &BaseConfig) -> Result<()> {
+        //device led path
+        let red_led_path = config.interfaces.led.blue_led.clone();
+        let green_led_path = config.interfaces.led.red_led.clone();
+        let blue_led_path = config.interfaces.led.green_led.clone();
+
+        let led = LedControl::new(&red_led_path, &green_led_path, &blue_led_path);
 
         match &self.command {
             LedCommands::SetLed(args) => {

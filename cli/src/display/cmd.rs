@@ -3,6 +3,7 @@ use clap::{Args, Subcommand};
 pub use mecha_display_ctl::DisplayControl;
 use tracing_subscriber::field::display;
 
+use crate::configs::BaseConfig;
 use crate::display::{DisplayError, DisplayErrorCodes};
 
 use crate::output_message::{Message, StdOut, BRIGHTNESS, DISPLAY};
@@ -22,9 +23,11 @@ enum DisplayCommands {
 }
 
 impl Display {
-    pub async fn execute(&self) -> Result<()> {
+    pub async fn execute(&self, config: &BaseConfig) -> Result<()> {
+        let display_path = config.interfaces.display.device.clone();
+
         // Use match to handle errors when creating a new DisplayControl instance
-        let display = match DisplayControl::new("path/to/display") {
+        let display = match DisplayControl::new(&display_path) {
             Ok(display) => display,
             Err(err) => {
                 println!("Error: {}", err);

@@ -1,8 +1,14 @@
 //add clippy
 #![warn(clippy::all)]
+use std::{fs::File, io::BufReader};
+
 use anyhow::Result;
 
 use clap::Parser;
+
+//device config
+mod configs;
+use crate::configs::BaseConfig;
 
 mod battery;
 use battery::Battery;
@@ -30,6 +36,11 @@ pub use motion_sensor::MotionSensor;
 
 mod output_message;
 
+#[derive(Parser, Debug)]
+struct Args {
+    #[clap(short, long)]
+    config_file: String,
+}
 
 #[derive(Debug, Parser)]
 #[command(name = "mecha")]
@@ -62,8 +73,13 @@ enum Mecha {
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = MechaCli::parse();
+    let profile_file = File::open("./Config.yml").expect("Failed to open config file");
+    let reader = BufReader::new(profile_file);
+
+    let config: BaseConfig = serde_yaml::from_reader(reader).expect("unable to rad yaml file");
+
     match cli.command {
-        Mecha::Battery(battery) => match battery.execute().await {
+        Mecha::Battery(battery) => match battery.execute(&config).await {
             Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);
@@ -84,20 +100,20 @@ async fn main() -> Result<()> {
             }
         },
 
-        Mecha::Display(display) => match display.execute().await {
+        Mecha::Display(display) => match display.execute(&config).await {
             Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);
             }
         },
 
-        Mecha::Led(led) => match led.execute().await {
+        Mecha::Led(led) => match led.execute(&config).await {
             Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);
             }
         },
-        
+
         Mecha::DeviceInfo(device_info) => match device_info.execute().await {
             Ok(_) => {}
             Err(e) => {
@@ -112,7 +128,7 @@ async fn main() -> Result<()> {
             }
         },
 
-        Mecha::MotionSensor(motion_sensor) => match motion_sensor.execute().await {
+        Mecha::MotionSensor(motion_sensor) => match motion_sensor.execute(&config).await {
             Ok(_) => {}
             Err(e) => {
                 println!("Error: {}", e);
